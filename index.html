@@ -39,6 +39,23 @@
             66% { content: "..." }
         }
 
+        /* New terminal loading animation */
+        @keyframes terminalLoading {
+            0% { content: "█"; }
+            20% { content: "██"; }
+            40% { content: "███"; }
+            60% { content: "████"; }
+            80% { content: "█████"; }
+            100% { content: ""; }
+        }
+        
+        .terminal-loading::after {
+            content: "";
+            animation: terminalLoading 1.5s infinite;
+            color: #00ff00;
+            letter-spacing: 2px;
+        }
+
         body {
             background-color: #001100;
             color: #00ff00;
@@ -257,6 +274,45 @@
             overflow: hidden;
         }
 
+        /* Progress bar loading animation */
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: rgba(0, 255, 0, 0.2);
+            height: 15px;
+            margin: 10px 0;
+            position: relative;
+            border: 1px solid #00ff00;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #00ff00;
+            width: 0%;
+            animation: progress 3s forwards;
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: repeating-linear-gradient(
+                -45deg,
+                rgba(0, 17, 0, 0.2),
+                rgba(0, 17, 0, 0.2) 10px,
+                transparent 10px,
+                transparent 20px
+            );
+        }
+
         @media (max-width: 480px) {
             body {
                 font-size: 14px;
@@ -290,7 +346,21 @@
             <div class="terminal-content">
                 <div class="prompt">INIT SYSTEM</div>
                 <div class="prompt">LOADING PROFILE<span class="loading"></span></div>
+                
+                <!-- New terminal loading animations -->
+                <div class="prompt">INITIALIZING COMPONENTS <span class="terminal-loading"></span></div>
+                
+                <div class="prompt">LOADING SYSTEM FILES</div>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+                
+                <div class="prompt">ESTABLISHING SECURE CONNECTION</div>
+                <div id="ascii-loading">
+                    █▒▒▒▒▒▒▒▒▒ 10%
+                </div>
                 <br>
+                
                 <div class="section">
                     <p>USER: <span>ItsKayzen</span></p>
                     <p>STATUS: <span>ONLINE</span></p>
@@ -409,7 +479,7 @@
                     terminal.classList.add('active');
                 });
 
-                // Minimize functionality
+// Minimize functionality
                 minimizeBtn.addEventListener('click', () => {
                     terminal.classList.toggle('minimized');
                 });
@@ -426,21 +496,21 @@
                 activeTerminal = e.target.closest('.terminal-window');
                 if (activeTerminal && e.target.closest('.terminal-header')) {
                     isDragging = true;
-                    
                     initialX = e.clientX - xOffset;
                     initialY = e.clientY - yOffset;
-
-                    terminals.forEach(terminal => {
-                        terminal.classList.remove('active');
-                    });
+                    
+                    document.addEventListener('mousemove', drag);
+                    document.addEventListener('mouseup', dragEnd);
+                    
+                    terminals.forEach(t => t.classList.remove('active'));
                     activeTerminal.classList.add('active');
                 }
             }
 
             function drag(e) {
-                if (isDragging && activeTerminal && !isMobile) {
+                if (isDragging && activeTerminal) {
                     e.preventDefault();
-
+                    
                     currentX = e.clientX - initialX;
                     currentY = e.clientY - initialY;
 
@@ -456,27 +526,41 @@
             }
 
             function dragEnd() {
+                initialX = currentX;
+                initialY = currentY;
                 isDragging = false;
+                
+                document.removeEventListener('mousemove', drag);
+                document.removeEventListener('mouseup', dragEnd);
             }
 
-            if (!isMobile) {
-                document.addEventListener('mousemove', drag);
-                document.addEventListener('mouseup', dragEnd);
-                document.addEventListener('mouseleave', dragEnd);
-            }
+            // ASCII loading animation
+            const loadingStates = [
+                "█▒▒▒▒▒▒▒▒▒ 10%",
+                "██▒▒▒▒▒▒▒▒ 20%",
+                "███▒▒▒▒▒▒▒ 30%",
+                "████▒▒▒▒▒▒ 40%",
+                "█████▒▒▒▒▒ 50%",
+                "██████▒▒▒▒ 60%",
+                "███████▒▒▒ 70%",
+                "████████▒▒ 80%",
+                "█████████▒ 90%",
+                "██████████ 100%",
+                "ACCESS GRANTED"
+            ];
 
-            // Window restore functionality
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    terminals.forEach(terminal => {
-                        terminal.style.display = 'block';
-                        terminal.classList.remove('minimized');
-                        if (!isMobile) {
-                            terminal.style.transform = 'translate(0, 0)';
-                        }
-                    });
+            let currentState = 0;
+            const asciiLoading = document.getElementById('ascii-loading');
+            
+            function updateLoadingState() {
+                if (currentState < loadingStates.length) {
+                    asciiLoading.textContent = loadingStates[currentState];
+                    currentState++;
+                    setTimeout(updateLoadingState, 300);
                 }
-            });
+            }
+            
+            updateLoadingState();
         });
     </script>
 </body>
