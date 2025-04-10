@@ -134,6 +134,8 @@
             letter-spacing: -0.05em;
             max-width: 90%;
             margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
         }
 
         .hero-subtext {
@@ -141,6 +143,8 @@
             max-width: 600px;
             margin-top: 1.5rem;
             font-weight: 300;
+            position: relative;
+            z-index: 2;
         }
 
         .scroll-indicator {
@@ -151,10 +155,33 @@
             align-items: center;
             opacity: 0.6;
             font-size: 0.9rem;
+            z-index: 2;
         }
 
         .scroll-indicator svg {
             margin-right: 0.5rem;
+        }
+
+        /* Three.js Canvas */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Content Sections */
+        .section-content {
+            position: relative;
+            z-index: 2;
+            background-color: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
         }
 
         /* Floating Images */
@@ -162,6 +189,7 @@
             position: absolute;
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 2;
         }
 
         .image-1 {
@@ -178,18 +206,49 @@
             transform: rotate(-3deg);
         }
 
-        .image-3 {
-            top: 30%;
-            left: 10%;
-            width: 150px;
-            transform: rotate(-5deg);
+        /* Client Logos Section */
+        .clients-section {
+            padding: 5rem 0;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
         }
 
-        .image-4 {
-            bottom: 30%;
-            left: 20%;
-            width: 170px;
-            transform: rotate(8deg);
+        .clients-container {
+            position: relative;
+            height: 180px;
+            margin: 2rem 0;
+        }
+
+        .logos-track {
+            position: absolute;
+            white-space: nowrap;
+            will-change: transform;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .client-logo {
+            height: 80px;
+            width: 180px;
+            background-color: transparent
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .client-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .client-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
         /* Projects Section */
@@ -199,6 +258,8 @@
             align-items: flex-end;
             margin-bottom: 3rem;
             padding-top: 5rem;
+            position: relative;
+            z-index: 2;
         }
 
         .section-title {
@@ -216,6 +277,8 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 2rem;
+            position: relative;
+            z-index: 2;
         }
 
         .project-card {
@@ -280,6 +343,8 @@
             grid-template-columns: 1fr 1fr;
             gap: 4rem;
             align-items: center;
+            position: relative;
+            z-index: 2;
         }
 
         .about-image {
@@ -321,6 +386,8 @@
             padding: 5rem 0;
             max-width: 700px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
 
         .contact h2 {
@@ -360,6 +427,9 @@
             align-items: center;
             border-top: 1px solid #333;
             margin-top: 2rem;
+            position: relative;
+            z-index: 2;
+            background-color: rgba(10, 10, 10, 0.7);
         }
 
         .footer-logo {
@@ -439,6 +509,9 @@
     </style>
 </head>
 <body>
+    <!-- Three.js Canvas -->
+    <canvas id="bg"></canvas>
+
     <!-- Header -->
     <header>
         <a href="https://itskayzen.github.io" class="logo">
@@ -454,7 +527,7 @@
             </ul>
         </nav>
         <a href="#contact" class="cta-button">Let's Talk</a>
-        <a href="htts://itskayzen.github.io/newsletter.html" class="ns-button">Newsletter</a>
+        <a href="https://itskayzen.github.io/newsletter.html" class="ns-button">Newsletter</a>
     </header>
 
     <!-- Hero Section -->
@@ -474,6 +547,44 @@
         <img src="duckOS-background-w.png" alt="Project Preview" class="floating-image image-2">
     </section>
 
+    <!-- Clients Section -->
+    <section class="clients-section container">
+        <div class="section-heading">
+            <h2 class="section-title">Clients & Collaborations</h2>
+            <p class="section-subtitle">Companies and creators I've worked with</p>
+        </div>
+        
+        <div class="clients-container">
+            <div class="logos-track" id="logos-track">
+                <!-- These are placeholder logos, replace with actual client logos -->
+                <div class="client-logo">
+                    <img src="/api/placeholder/160/70" alt="Client Logo 1">
+                </div>
+                <div class="client-logo">
+                    <img src="/api/placeholder/160/70" alt="Client Logo 2">
+                </div>
+                <div class="client-logo">
+                    <img src="/api/placeholder/160/70" alt="Client Logo 3">
+                </div>
+                <div class="client-logo">
+                    <img src="/api/placeholder/160/70" alt="Client Logo 4">
+                </div>
+                <div class="client-logo">
+                    <img src="/api/placeholder/160/70" alt="Client Logo 5">
+                </div>
+                <div class="client-logo">
+                    <img src="/api/placeholder/160/70" alt="Client Logo 6">
+                </div>
+                <div class="client-logo">
+                    <img src="/api/placeholder/160/70" alt="Client Logo 7">
+                </div>
+                <div class="client-logo">
+                    <img src="/api/placeholder/160/70" alt="Client Logo 8">
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Projects Section -->
     <section id="projects" class="container">
         <div class="section-heading">
@@ -487,7 +598,7 @@
                 <img src="ADVTHUMB.png" alt="Project 1" class="project-image">
                 <div class="project-content">
                     <h3 class="project-title">Adventure Boss</h3>
-                    <p class="project-category">Roblox Developpement / LUA coding</p>
+                    <p class="project-category">Roblox Development / LUA coding</p>
                     <p class="project-description">Go into intuitive Adventure in a retro world with many biomes and themes!</p>
                     <a href="https://www.roblox.com/fr/games/17129766305/Adventure-Boss-V5" class="project-link">
                         View Project
@@ -502,9 +613,9 @@
             <div class="project-card">
                 <img src="/api/placeholder/600/400" alt="Project 2" class="project-image">
                 <div class="project-content">
-                    <h3 class="project-title">Terminal Portofolio</h3>
+                    <h3 class="project-title">Terminal Portfolio</h3>
                     <p class="project-category">HTML and CSS coding / Development</p>
-                    <p class="project-description">Reimagine the protofolio website with a termina lthemed with windwos and skills!</p>
+                    <p class="project-description">Reimagine the portfolio website with a terminal themed with windows and skills!</p>
                     <a href="https://itskayzen.github.io/terminal.html" class="project-link">
                         View Project
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -513,24 +624,25 @@
                     </a>
                 </div>
             </div>
+        </div>
     </section>
 
     <!-- About Section -->
     <section id="about" class="about container">
         <div class="about-content">
             <h2>About Me</h2>
-            <p>Roblox game developper since 2022, graphic designer since 2024! I've worked with many games studios and youtubers.</p>
-            <p>I make stunning website, my service quality is a it's top, i hope you'd contribute to my work!</p>
-            <p>I'm also a basketball player/lover, when i'm not coding, i'm playing, i love sharing my basketball routine with my subscribers!</p>
+            <p>Roblox game developer since 2022, graphic designer since 2024! I've worked with many games studios and youtubers.</p>
+            <p>I make stunning websites, my service quality is at its top, I hope you'd contribute to my work!</p>
+            <p>I'm also a basketball player/lover, when I'm not coding, I'm playing. I love sharing my basketball routine with my subscribers!</p>
             
             <div class="skills">
                 <span class="skill-tag">HTML</span>
                 <span class="skill-tag">LUA</span>
                 <span class="skill-tag">UI/UX</span>
-                <span class="skill-tag">Graphic Deisgn</span>
+                <span class="skill-tag">Graphic Design</span>
                 <span class="skill-tag">CSS</span>
                 <span class="skill-tag">Editing</span>
-                <span class="skill-tag">Roblox Developpement</span>
+                <span class="skill-tag">Roblox Development</span>
             </div>
         </div>
         <img src="/api/placeholder/600/800" alt="About Me" class="about-image">
@@ -572,47 +684,210 @@
         <p class="copyright">© 2025 ItsKayzen. All rights reserved.</p>
     </footer>
 
-    <script>
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
+    <!-- Load Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
+    <script>
+        // Three.js Background Animation
+        function initThreeJsBackground() {
+            // Setup
+            const canvas = document.getElementById('bg');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.position.setZ(30);
+            
+            // Create particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 1500;
+            
+            const posArray = new Float32Array(particlesCount * 3);
+            
+            for(let i = 0; i < particlesCount * 3; i++) {
+                // Random positions between -50 and 50
+                posArray[i] = (Math.random() - 0.5) * 100;
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            
+            // Materials
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.3,
+                color: 0xff6b00,
+                transparent: true,
+                opacity: 0.7
+            });
+            
+            // Mesh
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
                 
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    window.scrollTo({
-                        top: target.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
+                // Rotate particles
+                particlesMesh.rotation.x += 0.0002;
+                particlesMesh.rotation.y += 0.0002;
+                
+                // Make particles respond to mouse movement
+                if (mouseX > 0 || mouseY > 0) {
+                    particlesMesh.rotation.x += mouseY * 0.00008;
+                    particlesMesh.rotation.y += mouseX * 0.00008;
+                }
+                
+                renderer.render(scene, camera);
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+            
+            // Mouse movement tracking
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            document.addEventListener('mousemove', (event) => {
+                mouseX = event.clientX - window.innerWidth / 2;
+                mouseY = event.clientY - window.innerHeight / 2;
+            });
+            
+            animate();
+        }
+
+        // Scrolling Logo Ticker
+        function initLogoScroller() {
+            const track = document.getElementById('logos-track');
+            const logos = track.querySelectorAll('.client-logo');
+            
+            // Clone logos to create seamless scrolling
+            logos.forEach(logo => {
+                const clone = logo.cloneNode(true);
+                track.appendChild(clone);
+            });
+            
+            let scrollPos = 0;
+            let scrollDirection = 0; // 0 = not scrolling, 1 = scrolling down, -1 = scrolling up
+            let lastScrollTop = 0;
+            
+            // Initial position
+            updateLogoPosition();
+            
+            // Update logo position based on scroll
+            function updateLogoPosition() {
+                const trackWidth = track.scrollWidth / 2;
+                
+                // Move logos based on scroll direction
+                if (scrollDirection === 1) {
+                    scrollPos -= 1;
+                } else if (scrollDirection === -1) {
+                    scrollPos += 1;
+                }
+                
+                // Loop the scroll position
+                if (scrollPos <= -trackWidth) {
+                    scrollPos = 0;
+                } else if (scrollPos >= 0) {
+                    scrollPos = -trackWidth + 1;
+                }
+                
+                track.style.transform = `translateX(${scrollPos}px)`;
+                requestAnimationFrame(updateLogoPosition);
+            }
+            
+            // Detect scroll direction
+            window.addEventListener('scroll', () => {
+                const st = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (st > lastScrollTop) {
+                    // Scrolling down
+                    scrollDirection = 1;
+                } else if (st < lastScrollTop) {
+                    // Scrolling up
+                    scrollDirection = -1;
+                }
+                
+                // If not scrolling for a second, stop moving logos
+                clearTimeout(window.scrollTimeout);
+                window.scrollTimeout = setTimeout(() => {
+                    scrollDirection = 0;
+                }, 100);
+                
+                lastScrollTop = st <= 0 ? 0 : st;
+            });
+        }
+
+        // Header scroll effect
+        function initHeaderScroll() {
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
                 }
             });
-        });
+        }
+
+        // Smooth scroll for anchor links
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
 
         // Floating image parallax effect
-        window.addEventListener('mousemove', function(e) {
-            const images = document.querySelectorAll('.floating-image');
-            const mouseX = e.clientX / window.innerWidth;
-            const mouseY = e.clientY / window.innerHeight;
-            
-            images.forEach(image => {
-                const moveX = (mouseX - 0.5) * 20;
-                const moveY = (mouseY - 0.5) * 20;
-                image.style.transform = `translate(${moveX}px, ${moveY}px) rotate(${image.classList.contains('image-1') ? 5 : image.classList.contains('image-2') ? -3 : image.classList.contains('image-3') ? -5 : 8}deg)`;
+        function initFloatingImageParallax() {
+            window.addEventListener('mousemove', function(e) {
+                const images = document.querySelectorAll('.floating-image');
+                const mouseX = e.clientX / window.innerWidth;
+                const mouseY = e.clientY / window.innerHeight;
+                
+                images.forEach(image => {
+                    const moveX = (mouseX - 0.5) * 20;
+                    const moveY = (mouseY - 0.5) * 20;
+                    image.style.transform = `translate(${moveX}px, ${moveY}px) rotate(${image.classList.contains('image-1') ? 5 : image.classList.contains('image-2') ? -3 : image.classList.contains('image-3') ? -5 : 8}deg)`;
+                });
             });
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Three.js background
+            initThreeJsBackground();
+            
+            // Initialize logo scroller
+            initLogoScroller();
+            
+            // Initialize header scroll effect
+            initHeaderScroll();
+            
+            // Initialize smooth scroll
+            initSmoothScroll();
+            
+            // Initialize floating image parallax
+            initFloatingImageParallax();
         });
     </script>
-</body>
-</html>
-    </div>
 </body>
 </html>
