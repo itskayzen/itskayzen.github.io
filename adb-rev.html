@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Game Review</title>
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        :root {
+            --primary: #4285F4;
+            --primary-light: #8AB4F8;
+            --primary-dark: #1A73E8;
+            --secondary: #34A853;
+            --accent: #FBBC05;
+            --error: #EA4335;
+            --dark: #959ba4;
+            --medium: #959ba4;
+            --light: #1c1c1c;
+            --surface: #000000;
+            --sidebar-width: 60px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Google Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+        }
+
+        .particles-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            opacity: 0.4;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 8s infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0; }
+            20% { opacity: 0.7; }
+            80% { opacity: 0.7; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--surface);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar:hover {
+            width: 180px;
+        }
+
+        .sidebar-logo {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-indicators {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            flex-grow: 1;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--medium);
+            opacity: 0.4;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-dot.active {
+            background-color: var(--primary);
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .nav-dot-label {
+            position: absolute;
+            left: 25px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 14px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .sidebar:hover .nav-dot-label {
+            opacity: 1;
+        }
+
+        .container {
+            flex-grow: 1;
+            margin-left: var(--sidebar-width);
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 800px;
+            padding: 40px;
+            position: relative;
+        }
+
+        .form-step {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-step.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--primary);
+            font-weight: 700;
+            font-family: 'Google Sans Display', sans-serif;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 40px;
+            color: var(--dark);
+            font-weight: 500;
+            font-family: 'Google Sans Display', sans-serif;
+        }
+
+        .question {
+            margin-bottom: 40px;
+            flex-grow: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--medium);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--light);
+            color: var(--dark);
+            font-size: 1rem;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%235F6368%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px top 50%;
+            background-size: 12px auto;
+            padding-right: 30px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-prev {
+            background-color: transparent;
+            color: var(--medium);
+            box-shadow: none;
+        }
+
+        .btn-prev:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--dark);
+            box-shadow: none;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            cursor: pointer;
+            font-size: 3rem;
+            color: rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: var(--accent);
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 8px rgba(251, 188, 5, 0.5));
+        }
+
+        .thank-you {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .thank-you h2 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .thank-you p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: var(--medium);
+            max-width: 500px;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-icon:before {
+            content: '';
+            width: 30px;
+            height: 60px;
+            border-right: 6px solid white;
+            border-bottom: 6px solid white;
+            transform: rotate(45deg) translate(5px, -15px);
+            animation: checkmark 0.8s ease-in-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes checkmark {
+            0% { opacity: 0; transform: rotate(45deg) translate(5px, -15px) scale(0.5); }
+            50% { opacity: 1; }
+            100% { opacity: 1; transform: rotate(45deg) translate(5px, -15px) scale(1); }
+        }
+
+        .success-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid transparent;
+            border-top: 5px solid white;
+            animation: rotate 1s linear infinite, fadeOut 1s ease-in-out forwards 1.5s;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Ripple effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+
+        .ripple:active:after {
+            transform: scale(0, 0);
+            opacity: .3;
+            transition: 0s;
+        }
+
+        /* Material Design input animations */
+        .input-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-container input, 
+        .input-container textarea {
+            padding: 15px;
+            padding-top: 25px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            border: none;
+        }
+
+        .input-container label {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: var(--medium);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .input-container input:focus ~ label,
+        .input-container input:not(:placeholder-shown) ~ label,
+        .input-container textarea:focus ~ label,
+        .input-container textarea:not(:placeholder-shown) ~ label {
+            top: 5px;
+            font-size: 0.75rem;
+            color: var(--primary);
+        }
+
+        .line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background-color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .input-container input:focus ~ .line,
+        .input-container textarea:focus ~ .line {
+            width: 100%;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                margin-left: 0;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 1000;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                top: 15px;
+                left: 15px;
+                z-index: 1001;
+                font-size: 24px;
+                color: var(--primary);
+                background: white;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+            
+            .star-rating label {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles-container" id="particles"></div>
+    
+    <!-- Sidebar Navigation with Material Design style -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <span class="material-symbols-rounded">games</span>
+        </div>
+        <div class="nav-indicators" id="nav-indicators">
+            <!-- Navigation dots will be added here by JavaScript -->
+        </div>
+    </div>
+    
+    <!-- Mobile menu toggle -->
+    <div class="menu-toggle" id="menu-toggle">
+        <span class="material-symbols-rounded">menu</span>
+    </div>
+    
+    <div class="container">
+        <div class="form-container">
+            <form id="reviewForm">
+                <!-- Step 1: Welcome -->
+                <div class="form-step active" id="step1">
+                    <h1>Adventure Boss - Review Form</h1>
+                    <h2>How should we call you?</h2>
+                    <div class="question">
+                        <div class="input-container">
+                            <input type="text" id="name" placeholder=" " required>
+                            <label for="name">Your name</label>
+                            <div class="line"></div>
+                        </div>
+                        <div class="error-message" id="nameError">Please tell us your name</div>
+                    </div>
+                    <div class="btn-container">
+                        <div></div> <!-- Empty div for spacing -->
+                        <button type="button" class="btn ripple" id="step1Next">
+                            Continue
+                            <span class="material-symbols-rounded">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Rating -->
+                <div class="form-step" id="step2">
+                    <h2>How would you rate our game?</h2>
+                    <div class="question">
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5">
+                            <label for="star5">★</label>
+                            <input type="radio" id="star4" name="rating" value="4">
+                            <label for="star4">★</label>
+                            <input type="radio" id="star3" name="rating" value="3">
+                            <label for="star3">★</label>
+                            <input type="radio" id="star2" name="rating" value="2">
+                            <label for="star2">★</label>
+                            <input type="radio" id="star1" name="rating" value="1">
+                            <label for="star1">★</label>
+                        </div>
+                        <div class="error-message" id="ratingError">Please select a rating</div>
+                    </div>
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-prev ripple" id="step2Prev">
+                            <span class="material-symbols-rounded">arrow_back</span>
+                            Back
+                        </button>
+                        <button type="button" class="btn ripple" id="step2Next">
+                            Continue
+                            <span class="material-symbols-rounded">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Favorite Feature -->
+                <div class="form-step" id="step3">
+                    <h2>What did you like most about our game?</h2>
+                    <div class="question">
+                        <select id="favorite" required>
+                            <option value="" disabled selected>Select an option</option>
+                            <option value="gameplay">Gameplay</option>
+                            <option value="graphics">Graphics & Visual Effects</option>
+                            <option value="levels">Levels and biomes</option>
+                            <option value="characters">Characters</option>
+                            <option value="community">Community & Friends</option>
+                            <option value="updates">Regular Updates & Events</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="error-message" id="favoriteError">Please select an option</div>
+                    </div>
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-prev ripple" id="step3Prev">
+                            <span class="material-symbols-rounded">arrow_back</span>
+                            Back
+                        </button>
+                        <button type="button" class="btn ripple" id="step3Next">
+                            Continue
+                            <span class="material-symbols-rounded">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Feedback -->
+                <div class="form-step" id="step4">
+                    <h2>Tell us more about your experience</h2>
+                    <div class="question">
+                        <div class="input-container">
+                            <textarea id="feedback" placeholder=" " required></textarea>
+                            <label for="feedback">Share your thoughts...</label>
+                            <div class="line"></div>
+                        </div>
+                        <div class="error-message" id="feedbackError">Please share your thoughts with us</div>
+                    </div>
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-prev ripple" id="step4Prev">
+                            <span class="material-symbols-rounded">arrow_back</span>
+                            Back
+                        </button>
+                        <button type="button" class="btn ripple" id="step4Next">
+                            Continue
+                            <span class="material-symbols-rounded">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 5: Contact -->
+                <div class="form-step" id="step5">
+                    <h2>How can we reach you?</h2>
+                    <div class="question">
+                        <div class="input-container">
+                            <input type="email" id="email" placeholder=" ">
+                            <label for="email">Email (optional)</label>
+                            <div class="line"></div>
+                        </div>
+                        
+                        <div class="input-container">
+                            <input type="text" id="discord" placeholder=" ">
+                            <label for="discord">Discord Username (optional)</label>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-prev ripple" id="step5Prev">
+                            <span class="material-symbols-rounded">arrow_back</span>
+                            Back
+                        </button>
+                        <button type="submit" class="btn ripple" id="submitBtn">
+                            Submit Feedback
+                            <span class="material-symbols-rounded">send</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Thank You Step -->
+                <div class="form-step" id="thankYou">
+                    <div class="thank-you">
+                        <div class="success-icon">
+                            <div class="success-ring"></div>
+                        </div>
+                        <h2>Thank You!</h2>
+                        <p>Your feedback has been sent to our team. We appreciate you taking the time to help us improve!</p>
+                        <button type="button" class="btn ripple" id="newReviewBtn">
+                            <span class="material-symbols-rounded">add</span>
+                            Submit Another Review
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles in the background
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 30;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random position
+            const x = Math.random() * 100;
+            const y = Math.random() * 100 + 100; // Start below the viewport
+            
+            particle.style.left = `${x}%`;
+            particle.style.top = `${y}%`;
+            
+            // Random size
+            const size = Math.random() * 40 + 10;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            // Random opacity and blur
+            particle.style.opacity = Math.random() * 0.6;
+            particle.style.filter = `blur(${Math.random() * 10 + 5}px)`;
+            
+            // Random delay and duration for floating
+            const delay = Math.random() * 20;
+            const duration = Math.random() * 8 + 12;
+            particle.style.animationDelay = `${delay}s`;
+            particle.style.animationDuration = `${duration}s`;
+            
+            particlesContainer.appendChild(particle);
+        }
+
+        // Form steps handling
+        const steps = document.querySelectorAll('.form-step');
+        const form = document.getElementById('reviewForm');
+        const navIndicators = document.getElementById('nav-indicators');
+        const totalSteps = steps.length - 1; // Exclude thank you step
+        let currentStep = 0;
+        
+        // Create navigation dots
+        const stepLabels = ['Your Name', 'Rating', 'Favorite Feature', 'Feedback', 'Contact Info', 'Thank You'];
+        
+        for (let i = 0; i < steps.length; i++) {
+            const navDot = document.createElement('div');
+            navDot.classList.add('nav-dot');
+            if (i === 0) navDot.classList.add('active');
+            
+            // Add label
+            const label = document.createElement('div');
+            label.classList.add('nav-dot-label');
+            label.textContent = stepLabels[i];
+            navDot.appendChild(label);
+            
+            // Add click event
+            navDot.addEventListener('click', () => {
+                // Only allow navigating to previous steps or current step
+                if (i <= currentStep) {
+                    goToStep(i);
+                }
+            });
+            
+            navIndicators.appendChild(navDot);
+        }
+
+        // Go to step
+        function goToStep(stepIndex) {
+            steps.forEach((step, index) => {
+                step.classList.remove('active');
+            });
+            
+            steps[stepIndex].classList.add('active');
+            
+            // Update nav dots
+            const navDots = document.querySelectorAll('.nav-dot');
+            navDots.forEach((dot, index) => {
+                dot.classList.remove('active');
+                if (index === stepIndex) {
+                    dot.classList.add('active');
+                }
+            });
+            
+            currentStep = stepIndex;
+        }
+
+        // Validate step
+        function validateStep(stepIndex) {
+            switch(stepIndex) {
+                case 0:
+                    const name = document.getElementById('name').value.trim();
+                    const nameError = document.getElementById('nameError');
+                    
+                    if (name === '') {
+                        nameError.style.display = 'block';
+                        return false;
+                    }
+                    nameError.style.display = 'none';
+                    return true;
+                    
+                case 1:
+                    const rating = document.querySelector('input[name="rating"]:checked');
+                    const ratingError = document.getElementById('ratingError');
+                    
+                    if (!rating) {
+                        ratingError.style.display = 'block';
+                        return false;
+                    }
+                    ratingError.style.display = 'none';
+                    return true;
+                    
+                case 2:
+                    const favorite = document.getElementById('favorite').value;
+                    const favoriteError = document.getElementById('favoriteError');
+                    
+                    if (favorite === '') {
+                        favoriteError.style.display = 'block';
+                        return false;
+                    }
+                    favoriteError.style.display = 'none';
+                    return true;
+                    
+                case 3:
+                    const feedback = document.getElementById('feedback').value.trim();
+                    const feedbackError = document.getElementById('feedbackError');
+                    
+                    if (feedback === '') {
+                        feedbackError.style.display = 'block';
+                        return false;
+                    }
+                    feedbackError.style.display = 'none';
+                    return true;
+                    
+                default:
+                    return true;
+            }
+        }
+
+        // Add event listeners for next buttons
+        document.getElementById('step1Next').addEventListener('click', () => {
+            if (validateStep(0)) goToStep(1);
+        });
+        
+        document.getElementById('step2Next').addEventListener('click', () => {
+            if (validateStep(1)) goToStep(2);
+        });
+        
+        document.getElementById('step3Next').addEventListener('click', () => {
+            if (validateStep(2)) goToStep(3);
+        });
+        
+        document.getElementById('step4Next').addEventListener('click', () => {
+            if (validateStep(3)) goToStep(4);
+        });
+
+        // Add event listeners for previous buttons
+        document.getElementById('step2Prev').addEventListener('click', () => {
+            goToStep(0);
+        });
+        
+        document.getElementById('step3Prev').addEventListener('click', () => {
+            goToStep(1);
+        });
+        
+        document.getElementById('step4Prev').addEventListener('click', () => {
+            goToStep(2);
+        });
+        
+        document.getElementById('step5Prev').addEventListener('click', () => {
+            goToStep(3);
+        });
+
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
+        // Submit form
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!validateStep(4)) return;
+            
+            const name = document.getElementById('name').value;
+            const rating = document.querySelector('input[name="rating"]:checked').value;
+            const favorite = document.getElementById('favorite').value;
+            const feedback = document.getElementById('feedback').value;
+            const email = document.getElementById('email').value;
+            const discord = document.getElementById('discord').value;
+            
+            // Show sending feedback animation
+            goToStep(5);
+            
+            // Prepare data for Discord webhook
+            const webhookUrl = 'https://discord.com/api/webhooks/1358063656734167151/zOXNOyHiRioK49GrtbCeikW-Q9tK009FMP77TvDw4b0t3tAyrkWAsi7zXuOaFhqRcOnW'; // Replace with your Discord webhook URL
+            
+            const data = {
+                embeds: [{
+                    title: `Roblox Game Review ${rating}/5 ⭐`,
+                    color: rating >= 4 ? 3447003 : rating >= 3 ? 16098851 : 15548997,
+                    fields: [
+                        {
+                            name: '👤 Name',
+                            value: name,
+                            inline: true
+                        },
+                        {
+                            name: '⭐ Rating',
+                            value: '⭐'.repeat(Number(rating)),
+                            inline: true
+                        },
+                        {
+                            name: '✨ Favorite Aspect',
+                            value: favorite.charAt(0).toUpperCase() + favorite.slice(1),
+                            inline: true
+                        },
+                        {
+                            name: '💬 Feedback',
+                            value: feedback
+                        }
+                    ],
+                    footer: {
+                        text: 'Roblox Game Review Form',
+                        icon_url: 'https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f3ae.png'
+                    },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+            
+            // Add contact info if provided
+            if (email || discord) {
+                data.embeds[0].fields.push({
+                    name: '📞 Contact Info',
+                    value: `${email ? '📧 Email: ' + email : ''} ${discord ? '\n🎮 Discord: ' + discord : ''}`
+                });
+            }
+            
+            try {
+                // In a real implementation, you would send the data to your server
+                // which would then forward it to Discord to avoid exposing your webhook URL
+                console.log('Sending review to Discord webhook:', data);
+                
+                // Simulate sending delay for demo purposes
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // In a real app you would use fetch to send the data:
+                /*
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                */
+                
+                // Already showing thank you message (step 5)
+                // The submission animation will play automatically
+            } catch (error) {
+                console.error('Error sending review:', error);
+                alert('There was an error submitting your review. Please try again.');
+            }
+        });
+
+        // New review button
+        document.getElementById('newReviewBtn').addEventListener('click', () => {
+            // Reset form
+            form.reset();
+            goToStep(0);
+        });
+
+        // Material design ripple effect
+        const rippleButtons = document.querySelectorAll('.ripple');
+        rippleButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple-effect');
+                
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Auto-focus first field when page loads
+        window.addEventListener('load', () => {
+            document.getElementById('name').focus();
+        });
+    </script>
+</body>
+</html>
