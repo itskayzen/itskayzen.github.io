@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITSKAYZEN* - UI/UX Designer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --google-blue: #4285f4;
+            --google-red: #ea4335;
+            --google-yellow: #fbbc04;
+            --google-green: #34a853;
+            --google-gray: #5f6368;
+            --google-light-gray: #f8f9fa;
+            --google-dark-gray: #202124;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            line-height: 1.6;
+            color: var(--google-dark-gray);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8f0fe 100%);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--google-blue);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--google-gray);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--google-blue);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--google-blue);
+        }
+
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1001;
+        }
+
+        .ai-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--google-blue), var(--google-green));
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-hover);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .ai-chat {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 320px;
+            height: 400px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-hover);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .ai-chat.active {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .ai-header {
+            background: var(--google-blue);
+            color: white;
+            padding: 1rem;
+            font-weight: 500;
+        }
+
+        .ai-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .ai-message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: var(--google-light-gray);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 6rem 2rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: slideInUp 1s ease;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: slideInUp 1s ease 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--google-blue);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            animation: slideInUp 1s ease 0.4s both;
+        }
+
+        .cta-button:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* About Section */
+        .about {
+            background: white;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            color: var(--google-blue);
+            margin-bottom: 1rem;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--google-gray);
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .skill-tag {
+            background: var(--google-light-gray);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--google-gray);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--google-blue);
+            color: var(--google-blue);
+        }
+
+        .about-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-hover);
+            text-align: center;
+            transform: rotate(2deg);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: rotate(0deg);
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--google-blue), var(--google-green));
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        /* Projects Section */
+        .projects {
+            background: var(--google-light-gray);
+        }
+
+        .projects h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--google-blue);
+            margin-bottom: 3rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .project-image {
+            height: 200px;
+            background: linear-gradient(135deg, #4285f4, #667eea, #5a67d8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%234285f4;stop-opacity:1" /><stop offset="50%" style="stop-color:%23667eea;stop-opacity:1" /><stop offset="100%" style="stop-color:%235a67d8;stop-opacity:1" /></linearGradient></defs><rect width="400" height="200" fill="url(%23bg)"/><circle cx="80" cy="60" r="30" fill="rgba(255,255,255,0.1)"/><circle cx="320" cy="140" r="40" fill="rgba(255,255,255,0.1)"/><rect x="150" y="80" width="100" height="40" rx="8" fill="rgba(255,255,255,0.15)"/></svg>') center/cover;
+        }
+
+        .project-image.ecommerce::before {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><defs><linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%234285f4;stop-opacity:1" /><stop offset="100%" style="stop-color:%23667eea;stop-opacity:1" /></linearGradient></defs><rect width="400" height="200" fill="url(%23bg1)"/><rect x="50" y="40" width="300" height="120" rx="12" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><rect x="70" y="60" width="80" height="60" rx="8" fill="rgba(255,255,255,0.2)"/><rect x="170" y="60" width="100" height="8" rx="4" fill="rgba(255,255,255,0.3)"/><rect x="170" y="80" width="150" height="6" rx="3" fill="rgba(255,255,255,0.2)"/><rect x="170" y="95" width="120" height="6" rx="3" fill="rgba(255,255,255,0.2)"/><rect x="280" y="130" width="60" height="20" rx="10" fill="rgba(255,255,255,0.4)"/></svg>') center/cover;
+        }
+
+        .project-image.mobile::before {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><defs><linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23667eea;stop-opacity:1" /><stop offset="100%" style="stop-color:%235a67d8;stop-opacity:1" /></linearGradient></defs><rect width="400" height="200" fill="url(%23bg2)"/><rect x="150" y="30" width="100" height="140" rx="20" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/><rect x="160" y="50" width="80" height="100" rx="8" fill="rgba(255,255,255,0.1)"/><rect x="170" y="60" width="60" height="4" rx="2" fill="rgba(255,255,255,0.4)"/><rect x="170" y="70" width="40" height="4" rx="2" fill="rgba(255,255,255,0.3)"/><rect x="170" y="80" width="50" height="4" rx="2" fill="rgba(255,255,255,0.3)"/><circle cx="200" cy="155" r="8" fill="rgba(255,255,255,0.2)"/></svg>') center/cover;
+        }
+
+        .project-image.dashboard::before {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><defs><linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%235a67d8;stop-opacity:1" /><stop offset="100%" style="stop-color:%234285f4;stop-opacity:1" /></linearGradient></defs><rect width="400" height="200" fill="url(%23bg3)"/><rect x="40" y="40" width="320" height="120" rx="8" fill="rgba(255,255,255,0.1)"/><rect x="60" y="60" width="80" height="40" rx="4" fill="rgba(255,255,255,0.2)"/><rect x="160" y="60" width="80" height="40" rx="4" fill="rgba(255,255,255,0.15)"/><rect x="260" y="60" width="80" height="40" rx="4" fill="rgba(255,255,255,0.2)"/><rect x="60" y="120" width="120" height="20" rx="4" fill="rgba(255,255,255,0.15)"/><rect x="200" y="120" width="140" height="20" rx="4" fill="rgba(255,255,255,0.2)"/></svg>') center/cover;
+        }
+
+        /* Project animation styles */
+        .projects-grid .project-card {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .projects-grid .project-card:nth-child(2) {
+            transform: translateY(50px);
+            transition-delay: 0.2s;
+        }
+
+        .projects-grid .project-card:nth-child(3) {
+            transform: translateX(100px);
+            transition-delay: 0.4s;
+        }
+
+        .projects-grid .project-card.animate-in {
+            opacity: 1;
+            transform: translateX(0) translateY(0);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--google-dark-gray);
+        }
+
+        .project-content p {
+            color: var(--google-gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: var(--google-light-gray);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--google-gray);
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--google-dark-gray);
+            color: white;
+        }
+
+        .contact-content {
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            border-color: var(--google-blue);
+            background: var(--google-blue);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .ai-chat {
+                width: 280px;
+                right: -10px;
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--google-light-gray);
+            z-index: 1002;
+        }
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--google-blue), var(--google-green));
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">ITSKAYZEN*</a>
+            <ul class="nav-links">
+                <li><a href="#hero" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- AI Assistant -->
+    <div class="ai-assistant">
+        <div class="ai-chat" id="aiChat">
+            <div class="ai-header">
+                <span class="material-icons" style="margin-right: 0.5rem;">smart_toy</span>
+                Portfolio Assistant
+            </div>
+            <div class="ai-messages" id="aiMessages">
+                <div class="ai-message">Hi! I'm your portfolio assistant. I'll help you navigate and learn about each section as you scroll. Click on any section to get started!</div>
+            </div>
+        </div>
+        <button class="ai-toggle" id="aiToggle">
+            <span class="material-icons">smart_toy</span>
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>itskayzen</h1>
+                <p class="subtitle">UI/UX Designer & Creative Problem Solver</p>
+                <a href="#projects" class="cta-button">View My Work</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Me</h2>
+                    <p>I'm a passionate UI/UX designer with 2+ years of experience creating intuitive and beautiful digital experiences. I believe in the power of design to solve complex problems and make technology more human.</p>
+                    <p>My approach combines user research, creative thinking, and technical expertise to deliver designs that not only look great but also provide exceptional user experiences.</p>
+                    <div class="skills">
+                        <span class="skill-tag">UI Designing</span>
+                        <span class="skill-tag">Game Developpement</span>
+                        <span class="skill-tag">HTML/CSS</span>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="profile-card">
+                        <div class="profile-avatar">
+                            <span class="material-icons">person</span>
+                        </div>
+                        <h3>itskayzen</h3>
+                        <p>UI/UX Designer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image ecommerce"></div>
+                    <div class="project-content">
+                        <h3>Adventure Boss: the Worlds</h3>
+                        <p>This Roblox game designed in an space environnement is here to teach players how to repair the imaginary galaxy of Roblox.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Roblox Developpement</span>
+                            <span class="tech-tag">Game Developpement</span>
+                            <span class="tech-tag">Prototyping</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image mobile"></div>
+                    <div class="project-content">
+                        <h3>ZenUI</h3>
+                        <p>Designed for perfection, ZenUI is an interface library, with many modern elements that you can implement in your project. (In dev)</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">UI Design</span>
+                            <span class="tech-tag">Library</span>
+                            <span class="tech-tag">Design System</span>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-content">
+                <h2>Let's Work Together</h2>
+                <p>Ready to create something amazing? I'd love to hear about your project and discuss how we can bring your ideas to life.</p>
+                <div class="contact-links">
+                    <a href="mailto:itskayzen.business@gmail.com" class="contact-link">
+                        <span class="material-icons">email</span>
+                        itskayzen.business@gmail.com
+                    </a>
+                    <a href="https://jmp.sh/Yu9wqun9" class="contact-link">
+                        <span class="material-icons">work</span>
+                        Resume
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // AI Assistant functionality
+        const aiToggle = document.getElementById('aiToggle');
+        const aiChat = document.getElementById('aiChat');
+        const aiMessages = document.getElementById('aiMessages');
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const scrollProgress = document.getElementById('scrollProgress');
+
+        let isAiOpen = false;
+        let currentSection = 'hero';
+
+        // AI Assistant messages for each section
+        const sectionMessages = {
+            hero: "Welcome to Kayzen's portfolio! I'm Smart Bot, I'm gonna walk you through Kayzen's website!",
+            about: "You're in the About section! Here you can learn about Kayzen's background and skills. As Kay's friend, you should consider hiring him, because he's the best UI designer!.",
+            projects: "This is the Projects section showcasing Kayzen's work. Each projects are selected from 2023 to 2025, enjoy watching boring text, you should test these project.",
+            contact: "You've reached the Contact section! Here you can hire our GOAT of the UI's, contact him or i'll do it (robot joke)."
+        };
+
+        // Toggle AI Assistant
+        aiToggle.addEventListener('click', () => {
+            isAiOpen = !isAiOpen;
+            aiChat.classList.toggle('active', isAiOpen);
+            
+            if (isAiOpen && currentSection) {
+                addAiMessage(sectionMessages[currentSection]);
+            }
+        });
+
+        // Add message to AI assistant
+        function addAiMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'ai-message';
+            messageDiv.textContent = message;
+            aiMessages.appendChild(messageDiv);
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+        }
+
+        // Intersection Observer for section detection
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionId = entry.target.id;
+                    currentSection = sectionId;
+                    
+                    // Update navigation
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                    
+                    // Auto-show AI message if assistant is open
+                    if (isAiOpen && sectionMessages[sectionId]) {
+                        setTimeout(() => {
+                            addAiMessage(sectionMessages[sectionId]);
+                        }, 500);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Projects animation observer
+        const projectsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const projectCards = entry.target.querySelectorAll('.project-card');
+                    projectCards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.classList.add('animate-in');
+                        }, index * 200);
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const projectsSection = document.getElementById('projects');
+        if (projectsSection) {
+            projectsObserver.observe(projectsSection);
+        }
+
+        // Smooth scrolling for navigation links
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+
+        // Project card interactions
+        const projectCards = document.querySelectorAll('.project-card');
+        projectCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Add click animation
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 150);
+                
+                if (isAiOpen) {
+                    addAiMessage("Great choice! This project showcases modern UI/UX design principles. In a real portfolio, clicking here would open a detailed case study with process documentation, user research findings, and design iterations.");
+                }
+            });
+        });
+
+        // Skill tag interactions
+        const skillTags = document.querySelectorAll('.skill-tag');
+        skillTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                if (isAiOpen) {
+                    const skill = tag.textContent;
+                    addAiMessage(`${skill} is a crucial skill in UI/UX design! This represents one of Alex's core competencies. Modern portfolios often include interactive elements like this to engage visitors and provide more information about the designer's expertise.`);
+                }
+            });
+        });
+
+        // Initialize scroll progress
+        window.dispatchEvent(new Event('scroll'));
+
+        // Add some interactive particles effect to hero section
+        function createParticle() {
+            const hero = document.querySelector('.hero');
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                pointer-events: none;
+                animation: particleFloat 4s linear forwards;
+            `;
+            
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = '100%';
+            
+            hero.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 4000);
+        }
+
+        // Add particle animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleFloat {
+                to {
+                    transform: translateY(-100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Create particles periodically
+        setInterval(createParticle, 2000);
+    </script>
+</body>
+</html>
